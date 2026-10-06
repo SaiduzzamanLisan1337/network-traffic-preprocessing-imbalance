@@ -1,0 +1,2 @@
+[console_scripts]
+ids-imbalance = network_imbalance.experiment:main

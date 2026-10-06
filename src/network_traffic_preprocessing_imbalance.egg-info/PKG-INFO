@@ -1,0 +1,213 @@
+Metadata-Version: 2.4
+Name: network-traffic-preprocessing-imbalance
+Version: 1.0.0
+Summary: Reproducible study of preprocessing and class-imbalance strategies for intrusion detection
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy<3,>=1.26
+Requires-Dist: pandas<3,>=2.1
+Requires-Dist: scikit-learn<2,>=1.4
+Requires-Dist: imbalanced-learn<1,>=0.12
+Requires-Dist: scipy<2,>=1.11
+Requires-Dist: matplotlib<4,>=3.8
+Requires-Dist: seaborn<1,>=0.13
+Requires-Dist: PyYAML<7,>=6
+Requires-Dist: joblib<2,>=1.3
+Provides-Extra: dev
+Requires-Dist: pytest<9,>=8; extra == "dev"
+Requires-Dist: ruff<1,>=0.6; extra == "dev"
+Dynamic: license-file
+
+# Network Traffic Preprocessing and Class-Imbalance Study
+
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Tests](https://img.shields.io/badge/tests-pytest-orange)
+
+A reproducible intrusion-detection study comparing **standardization, feature selection, class weighting, and SMOTE** under imbalanced network traffic. The project emphasizes minority-attack recall/F1, leakage-safe preprocessing, repeated fold-level evaluation, and statistical comparison.
+
+## Research questions
+
+1. How strongly does class imbalance affect minority-attack detection?
+2. Does standardization improve model stability?
+3. Can feature selection reduce dimensionality without reducing minority detection quality?
+4. How does class weighting compare with SMOTE?
+5. Do combined preprocessing strategies produce statistically meaningful improvements?
+6. Are the effects consistent across linear and tree-based classifiers?
+
+## Experimental strategies
+
+| Strategy | Standardization | Feature selection | Class weighting | SMOTE |
+|---|---:|---:|---:|---:|
+| baseline | No | No | No | No |
+| standardized | Yes | No | No | No |
+| feature_selected | Yes | Yes | No | No |
+| class_weighted | Yes | No | Yes | No |
+| smote | Yes | No | No | Yes |
+| combined | Yes | Yes | Yes | Yes |
+
+## Metrics
+
+Primary research metrics:
+
+- Minority-class precision
+- **Minority-class recall**
+- **Minority-class F1**
+- Macro-F1
+- Balanced accuracy
+- PR-AUC
+
+Accuracy is retained as a secondary metric only.
+
+## Repository structure
+
+```text
+network-traffic-preprocessing-imbalance/
+├── configs/                 # Experiment configuration
+├── data/                    # Dataset location; raw data is ignored by Git
+├── notebooks/               # Optional exploratory notebooks
+├── reports/                 # Research methodology and report materials
+├── results/                 # Generated tables and figures
+├── scripts/                 # Convenience entry points
+├── src/network_imbalance/   # Reusable Python package
+├── tests/                   # Automated tests
+├── pyproject.toml
+└── README.md
+```
+
+## Quick start
+
+### 1. Create an environment
+
+```bash
+python -m venv .venv
+```
+
+Linux/macOS:
+```bash
+source .venv/bin/activate
+```
+
+Windows PowerShell:
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### 2. Install
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 3. Run the included smoke-test experiment
+
+No dataset is required for the demo:
+
+```bash
+python -m network_imbalance.experiment
+```
+
+The demo automatically creates a deterministic imbalanced synthetic IDS-like dataset if `data/raw/ids.csv` is missing.
+
+### 4. Run on your IDS dataset
+
+Place the CSV here:
+
+```text
+data/raw/ids.csv
+```
+
+Then edit:
+
+```yaml
+data:
+  path: data/raw/ids.csv
+  target_column: Label
+```
+
+Run:
+
+```bash
+python -m network_imbalance.experiment --config configs/experiment.yaml
+```
+
+Or:
+
+```bash
+ids-imbalance --config configs/experiment.yaml
+```
+
+## Output
+
+After a run:
+
+```text
+results/
+├── tables/
+│   ├── dataset_metadata.json
+│   ├── fold_results.csv
+│   ├── experiment_summary.csv
+│   └── paired_statistics_minority_f1.csv
+└── figures/
+    ├── class_distribution.png
+    ├── recall.png
+    ├── f1.png
+    ├── macro_f1.png
+    ├── balanced_accuracy.png
+    └── pr_auc.png
+```
+
+## Important methodological safeguards
+
+### No SMOTE leakage
+
+SMOTE is applied **inside the training fold only**. The test fold remains untouched.
+
+### No scaler leakage
+
+Standardization is fitted separately on each training fold through the pipeline.
+
+### No feature-selection leakage
+
+Mutual-information feature selection is fitted only on training data.
+
+These safeguards are essential if the results are intended for academic or research use.
+
+## Statistical testing
+
+The repository records every CV fold and performs paired comparisons against the baseline using:
+
+- paired t-test
+- Wilcoxon signed-rank test
+- mean metric difference
+
+For a publication, report confidence intervals and effect sizes alongside p-values.
+
+## Dataset note
+
+The repository does not redistribute CICIDS2017 or other third-party datasets. Follow the dataset provider's license/terms and document the exact dataset version, preprocessing, and label mapping used for your experiment.
+
+## Recommended research extension
+
+For a stronger PhD portfolio study, add:
+
+- multiple IDS datasets (e.g., CICIDS2017, CSE-CIC-IDS2018, UNSW-NB15)
+- temporal or day-wise train/test splits
+- repeated stratified CV
+- bootstrap confidence intervals
+- effect sizes
+- PR curves per attack type
+- calibration analysis
+- computational cost analysis
+- ablation studies
+- external validation on a second dataset
+
+## Citation
+
+If you use this repository in academic work, cite the repository and the original dataset papers/data sources separately.
+
+## License
+
+MIT. See `LICENSE`.

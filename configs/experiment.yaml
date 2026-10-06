@@ -1,0 +1,37 @@
+seed: 42
+
+# CSV input. Use a local file for CICIDS2017 or another compatible IDS dataset.
+data:
+  path: data/raw/ids.csv
+  target_column: Label
+  drop_columns: []
+  max_rows: null
+
+split:
+  test_size: 0.20
+  validation_size: 0.0
+
+experiment:
+  cv_folds: 5
+  scoring_primary: f1_macro
+  n_jobs: -1
+  save_models: false
+  use_demo_if_missing: true
+  demo_samples: 3000
+
+feature_selection:
+  enabled: true
+  method: mutual_info
+  k: 30
+
+models:
+  - logistic_regression
+  - random_forest
+
+strategies:
+  - baseline
+  - standardized
+  - feature_selected
+  - class_weighted
+  - smote
+  - combined

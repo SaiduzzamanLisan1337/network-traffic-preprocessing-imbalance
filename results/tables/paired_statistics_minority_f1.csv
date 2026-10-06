@@ -1,0 +1,11 @@
+model,comparison,metric,n_pairs,mean_difference,paired_t_p,wilcoxon_p
+logistic_regression,standardized vs baseline,minority_f1,5,-0.003464446452771619,0.5076584703186088,1.0
+logistic_regression,feature_selected vs baseline,minority_f1,5,-0.006676170622673866,0.6189540153735956,0.625
+logistic_regression,class_weighted vs baseline,minority_f1,5,-0.04247490399782737,0.380882455936405,0.625
+logistic_regression,smote vs baseline,minority_f1,5,-0.040721614312401934,0.4087168371792767,0.625
+logistic_regression,combined vs baseline,minority_f1,5,-0.03734478083280718,0.44912674334505875,0.625
+random_forest,standardized vs baseline,minority_f1,5,0.0,,1.0
+random_forest,feature_selected vs baseline,minority_f1,5,0.04216688238093026,0.03464911547364804,0.125
+random_forest,class_weighted vs baseline,minority_f1,5,0.2979285864419268,0.000757901984264142,0.0625
+random_forest,smote vs baseline,minority_f1,5,0.35067356299244845,0.0004041771151652519,0.0625
+random_forest,combined vs baseline,minority_f1,5,0.34966599142747073,0.00010146363354731704,0.0625

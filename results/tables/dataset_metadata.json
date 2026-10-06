@@ -1,0 +1,9 @@
+{
+  "source": "sklearn.make_classification demo",
+  "rows": 3000,
+  "features": 40,
+  "class_counts": {
+    "BENIGN": 2774,
+    "ATTACK": 226
+  }
+}

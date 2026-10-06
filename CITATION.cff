@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "Network Traffic Preprocessing and Class-Imbalance Study"
+type: software
+version: 1.0.0
+date-released: 2026-10-05
+license: MIT
+authors:
+  - family-names: Saiduzzaman
+    given-names: Md.
+repository-code: "https://github.com/your-username/network-traffic-preprocessing-imbalance"
+abstract: "Reproducible study of preprocessing and class-imbalance strategies for intrusion detection, emphasizing minority-attack recall and F1."
